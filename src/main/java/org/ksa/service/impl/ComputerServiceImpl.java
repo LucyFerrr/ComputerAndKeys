@@ -11,6 +11,10 @@ import org.ksa.service.ComputerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementation of {@link ComputerService} for managing {@link Computer} entities.
+ * Provides CRUD operations for computers.
+ */
 @Service
 @AllArgsConstructor
 @Transactional
@@ -18,25 +22,36 @@ public class ComputerServiceImpl implements ComputerService {
 
     private ComputerRepository computerRepository;
 
-    //    GET computer maker and model
+    /**
+     * Retrieves computer by maker and model.
+     * <p>
+     * Business rules:
+     * <ul>
+     *     <li>404 if maker doesn't exist</li>
+     *     <li>403 if maker exists but model is missing</li>
+     *     <li>200 if data is found</li>
+     * </ul>
+     *
+     * @param maker manufacturer of the computer
+     * @param model model name of computer
+     * @return the matching {@link ComputerDTO}
+     * @throws InvalidMakerException     if maker exists but model is missing
+     * @throws ComputerNotFoundException if maker doesn't exist
+     */
     @Override
     public ComputerDTO getComputerByMakerAndModel(String maker, String model) {
-
-        // Checking for model
-        if(model == null || model.trim().isEmpty() || model.equals("/")) {
-            if(computerRepository.existsByMaker(maker)) {
+        if (model == null || model.trim().isEmpty() || model.equals("/")) {
+            if (computerRepository.existsByMaker(maker)) {
                 throw new InvalidMakerException("Model parameter required");
             } else {
                 throw new ComputerNotFoundException("Maker '" + maker + "' not found");
             }
         }
 
-        // Checking if maker exist
-        if(!computerRepository.existsByMaker(maker)) {
+        if (!computerRepository.existsByMaker(maker)) {
             throw new ComputerNotFoundException("Maker '" + maker + "' not found");
         }
 
-        // Find the specific computer
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> {
                     return new ComputerNotFoundException("Computer not found for maker '" + maker + "' and model '" + model + "'");
@@ -45,10 +60,21 @@ public class ComputerServiceImpl implements ComputerService {
         return ComputerMapper.mapToComputerDto(computer);
     }
 
-    // POST create a new computer
+    /**
+     * Creates new computer record.
+     * <p>
+     * Business rules:
+     * <ul>
+     *     <li>400 if computer with same maker and model already exists</li>
+     *     <li>201 if created data is successful</li>
+     * </ul>
+     *
+     * @param computerDTO DTO containing computer details
+     * @return the created {@link ComputerDTO}
+     * @throws IllegalArgumentException if computer with same maker and model already exists
+     */
     public ComputerDTO createComputer(ComputerDTO computerDTO) {
-        // Check if computer already exists
-        if(computerRepository.existsByMakerAndModel(computerDTO.getMaker(), computerDTO.getModel())) {
+        if (computerRepository.existsByMakerAndModel(computerDTO.getMaker(), computerDTO.getModel())) {
             throw new IllegalArgumentException("Computer already exists");
         }
 
@@ -59,6 +85,22 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     // PUT update existing computer
+
+    /**
+     * Updates an existing computer by maker and model.
+     * <p>
+     * Business rules:
+     * <ul>
+     *     <li>404 if computer does not exist</li>
+     *     <li>200 if updated data is successful</li>
+     * </ul>
+     *
+     * @param maker       manufacturer of the computer
+     * @param model       model name of computer
+     * @param computerDTO DTO containing computer details
+     * @return the updated {@link ComputerDTO}
+     * @throws ComputerNotFoundException if computer does not exist
+     */
     public ComputerDTO updateComputer(String maker, String model, ComputerDTO computerDTO) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));
@@ -70,6 +112,20 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     // DELETE computer
+
+    /**
+     * Deletes a computer identified by maker and model.
+     * <p>
+     * Business rules:
+     * <ul>
+     *     <li>404 if computer does not exist</li>
+     *     <li>204 if deletion is successful</li>
+     * </ul>
+     *
+     * @param maker manufacturer of the computer
+     * @param model model name of computer
+     * @throws ComputerNotFoundException if the computer does not exist
+     */
     public void deleteComputer(String maker, String model) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));

@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * DTO representing computer entity.
+ * Support both JSON and XML formats.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -38,6 +42,9 @@ public class ComputerDTO {
     @JsonProperty("colors")
     private ColorsWrapper colors;
 
+    /**
+     * Wrapper class for list of color options.
+     */
     @Data
     @Builder
     @NoArgsConstructor

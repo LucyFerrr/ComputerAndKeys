@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Response DTO for SSH key record
+ */
 @Data
 @Builder
 @NoArgsConstructor

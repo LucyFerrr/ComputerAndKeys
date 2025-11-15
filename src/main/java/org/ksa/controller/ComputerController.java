@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * REST controller for managing computer records.
+ * CRUD operations via JSON and XML payloads.
+ */
 @RestController
 @RequestMapping("/computers")
 @AllArgsConstructor
@@ -23,7 +27,15 @@ public class ComputerController {
 
     private final ComputerService computerService;
 
-    // GET /computers/{maker}/{model}
+    /**
+     * Retrieves computer by maker and model.
+     * <p>
+     * GET /computers/{maker}/{model}
+     *
+     * @param maker manufacturer of the computer
+     * @param model model of the computer
+     * @return matching {@link ComputerDTO}
+     */
     @GetMapping(
             path = {"/{maker}/{model}", "/{maker}/{model}/", "/{maker}"},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
@@ -43,7 +55,14 @@ public class ComputerController {
         return ResponseEntity.ok(computer);
     }
 
-    // POST /computers
+    /**
+     * Creates a new computer.
+     * <p>
+     * POST /computers
+     *
+     * @param computerDTO computer data to create
+     * @return the created {@link ComputerDTO}
+     */
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
@@ -57,7 +76,16 @@ public class ComputerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // PUT /computers/{maker}/{model}
+    /**
+     * Updates existing computer record by maker and model.
+     * <p>
+     * PUT /computers/{maker}/{model}
+     *
+     * @param maker       manufacturer of the computer
+     * @param model       model of the computer
+     * @param computerDTO updated computer data
+     * @return the updated {@link ComputerDTO}
+     */
     @PutMapping(
             path = "/{maker}/{model}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -72,7 +100,15 @@ public class ComputerController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE a computer
+    /**
+     * Deletes a computer record by maker and model.
+     * <p>
+     * DELETE /computers/{maker}/{model}
+     *
+     * @param maker manufacturer of the computer
+     * @param model model of the computer
+     * @return HTTP 204 No Content if deletion is successful
+     */
     @DeleteMapping("/{maker}/{model}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204"),

@@ -10,6 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+/**
+ * Request DTO for submitting SSH key.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,6 +23,9 @@ public class SshKeyRequestDTO {
     @JsonProperty("ssh-key")
     private SshKeyDTO sshKey;
 
+    /**
+     * DTO representing SSH key details
+     */
     @Data
     @Builder
     @NoArgsConstructor
