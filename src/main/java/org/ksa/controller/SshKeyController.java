@@ -34,7 +34,7 @@ public class SshKeyController {
         }
     )
     public ResponseEntity<SshKeyResponseDTO> addSshKey(@PathVariable String serverType, @PathVariable String serverName, @Valid @RequestBody SshKeyRequestDTO request) {
-        SshKeyResponseDTO response = sshKeyService.addSshKey(serverName, serverType, request);
+        SshKeyResponseDTO response = sshKeyService.addSshKey(serverType, serverName, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -55,7 +55,7 @@ public class SshKeyController {
             @ApiResponse(responseCode = "200")
     })
     public ResponseEntity<List<SshKeyResponseDTO>> getAllSshKeys(@PathVariable String serverType, @PathVariable String serverName) {
-        List<SshKeyResponseDTO> keys = sshKeyService.getAllKeys(serverName, serverType);
+        List<SshKeyResponseDTO> keys = sshKeyService.getAllKeys(serverType, serverName);
         return ResponseEntity.ok(keys);
     }
 

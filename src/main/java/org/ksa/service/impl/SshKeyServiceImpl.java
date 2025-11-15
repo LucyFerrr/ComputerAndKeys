@@ -28,6 +28,9 @@ public class SshKeyServiceImpl implements SshKeyService {
 
         SshKeyRequestDTO.SshKeyDTO keyDTO = request.getSshKey();
 
+        // Validate SSH key
+        validateSshKey(keyDTO);
+
         // Check key if already exists
         if (sshKeyRepository.existsByServerTypeAndServerNameAndPublicKey(serverType, serverName, keyDTO.getPublicKey())){
             throw new InvalidSshKeyException("SSH key already exists");
@@ -83,5 +86,24 @@ public class SshKeyServiceImpl implements SshKeyService {
         }
 
         sshKeyRepository.deleteById(id);
+    }
+
+    // Validation of SSH key (Basic)
+    // TODO: Improve SSH key validation.
+    private void validateSshKey(SshKeyRequestDTO.SshKeyDTO sshKeyDTO) {
+        String type = sshKeyDTO.getType();
+        String publicKey = sshKeyDTO.getPublicKey();
+
+        if ("ssh-rsa".equals(type)) {
+            if(publicKey.length() < 300) {
+                throw new InvalidSshKeyException("The content of the public key is invalid for the type 'ssh-rsa'");
+            }
+        }
+
+        if("ssh-ed25519".equals(type)) {
+            if(publicKey.length() < 40 || publicKey.length() > 100) {
+                throw new InvalidSshKeyException("The content of the public key is invalid for the type 'ed25519'");
+            }
+        }
     }
 }

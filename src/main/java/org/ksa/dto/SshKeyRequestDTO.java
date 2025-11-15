@@ -27,7 +27,7 @@ public class SshKeyRequestDTO {
     public static class SshKeyDTO {
 
         @NotBlank(message = "SSH key type is required")
-        @Pattern(regexp = "^(ssh-ed25519|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521)$")
+        @Pattern(regexp = "^(ssh-rsa|ssh-ed25519)$")
         private String type;
 
         @NotBlank(message = "Public key is required")
