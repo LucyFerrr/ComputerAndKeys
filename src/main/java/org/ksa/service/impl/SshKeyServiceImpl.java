@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.ksa.dto.SshKeyRequestDTO;
 import org.ksa.dto.SshKeyResponseDTO;
 import org.ksa.entity.SshKey;
+import org.ksa.exception.InvalidSshKeyException;
 import org.ksa.mapper.SshKeyMapper;
 import org.ksa.repository.SshKeyRepository;
 import org.ksa.service.SshKeyService;
@@ -22,10 +23,12 @@ public class SshKeyServiceImpl implements SshKeyService {
 
         SshKeyRequestDTO.SshKeyDTO keyDTO = request.getSshKey();
 
+        // Check key if already exists
         if (sshKeyRepository.existsByServerNameAndUserNameAndPublicKey(serverName, userName, keyDTO.getPublicKey())){
-            throw new RuntimeException();
+            throw new InvalidSshKeyException("SSH key already exists");
         }
 
+        // Save key
         SshKey entity = SshKeyMapper.mapToSshKey(keyDTO, serverName, userName);
         SshKey saved = sshKeyRepository.save(entity);
 
