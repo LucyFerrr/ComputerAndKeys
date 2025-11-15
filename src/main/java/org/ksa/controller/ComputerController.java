@@ -1,9 +1,12 @@
 package org.ksa.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.ksa.dto.ComputerDTO;
 import org.ksa.service.ComputerService;
@@ -23,6 +26,7 @@ import javax.validation.Valid;
 @RequestMapping("/computers")
 @AllArgsConstructor
 @Validated
+@Tag(name = "Computers", description = "API for managing computer information")
 public class ComputerController {
 
     private final ComputerService computerService;
@@ -40,17 +44,28 @@ public class ComputerController {
             path = {"/{maker}/{model}", "/{maker}/{model}/", "/{maker}"},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @Operation(
+            summary = "Get computer by maker and model",
+            description = "Retrieves computer information. Returns JSON or XML based on Accept header."
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Computer found",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ComputerDTO.class)
                     )
             ),
-            @ApiResponse(responseCode = "403"),
-            @ApiResponse(responseCode = "404")
+            @ApiResponse(responseCode = "403", description = "Model parameter required"),
+            @ApiResponse(responseCode = "404", description = "Computer or maker not found")
     })
-    public ResponseEntity<ComputerDTO> getComputer(@PathVariable String maker, @PathVariable(required = false) String model) {
+    public ResponseEntity<ComputerDTO> getComputer(
+            @Parameter(description = "Computer manufacturer (e.g., ASUS, HP)", required = true)
+            @PathVariable String maker,
+
+            @Parameter(description = "Computer model (e.g., X507UA, Victus)")
+            @PathVariable(required = false) String model) {
         ComputerDTO computer = computerService.getComputerByMakerAndModel(maker, model);
         return ResponseEntity.ok(computer);
     }
@@ -67,9 +82,10 @@ public class ComputerController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @Operation(summary = "Create a new computer", description = "Adds a new computer to the system")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201"),
-            @ApiResponse(responseCode = "400")
+            @ApiResponse(responseCode = "201", description = "Computer created"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     public ResponseEntity<ComputerDTO> createComputer(@Valid @RequestBody ComputerDTO computerDTO) {
         ComputerDTO created = computerService.createComputer(computerDTO);
@@ -91,9 +107,10 @@ public class ComputerController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @Operation(summary = "Update computer", description = "Updates an existing computer")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "404")
+            @ApiResponse(responseCode = "200", description = "Computer updated"),
+            @ApiResponse(responseCode = "404", description = "Computer not found")
     })
     public ResponseEntity<ComputerDTO> updateComputer(@PathVariable String maker, @PathVariable String model, @Valid @RequestBody ComputerDTO computerDTO) {
         ComputerDTO updated = computerService.updateComputer(maker, model, computerDTO);
@@ -110,9 +127,10 @@ public class ComputerController {
      * @return HTTP 204 No Content if deletion is successful
      */
     @DeleteMapping("/{maker}/{model}")
+    @Operation(summary = "Delete computer", description = "Removes a computer from the system")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204"),
-            @ApiResponse(responseCode = "404")
+            @ApiResponse(responseCode = "204", description = "Computer deleted"),
+            @ApiResponse(responseCode = "404", description = "Computer not found")
     })
     public ResponseEntity<Void> deleteComputer(@PathVariable String maker, @PathVariable String model) {
         computerService.deleteComputer(maker, model);
