@@ -1,7 +1,9 @@
 package org.ksa.mapper;
 
+import org.ksa.dto.ComputerDTO;
 import org.ksa.dto.SshKeyRequestDTO;
 import org.ksa.dto.SshKeyResponseDTO;
+import org.ksa.entity.Computer;
 import org.ksa.entity.SshKey;
 import org.springframework.stereotype.Component;
 
@@ -32,4 +34,15 @@ public class SshKeyMapper {
                .comment(dto.getComment())
                .build();
    }
+
+    // Update entity with DTO data
+    public static void updateEntityFromDTO(SshKeyRequestDTO.SshKeyDTO sshKeyDto, SshKey sshKey) {
+        if (sshKeyDto == null || sshKey == null) return;
+
+        if (sshKeyDto.getType() != null) sshKey.setType(sshKeyDto.getType());
+
+        if (sshKeyDto.getPublicKey() != null) sshKey.setPublicKey(sshKeyDto.getPublicKey());
+
+        if (sshKeyDto.getComment() != null) sshKey.setComment(sshKeyDto.getComment());
+    }
 }

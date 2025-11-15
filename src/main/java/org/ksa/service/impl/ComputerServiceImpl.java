@@ -46,7 +46,6 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     // POST create a new computer
-
     public ComputerDTO createComputer(ComputerDTO computerDTO) {
         // Check if computer already exists
         if(computerRepository.existsByMakerAndModel(computerDTO.getMaker(), computerDTO.getModel())) {
