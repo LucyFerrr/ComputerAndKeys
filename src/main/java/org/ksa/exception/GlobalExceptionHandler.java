@@ -35,4 +35,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
+
+    // 400
+    @ExceptionHandler(InvalidSshKeyException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSshKey(InvalidSshKeyException iske) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(("Bad Request"))
+                .message(iske.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }
