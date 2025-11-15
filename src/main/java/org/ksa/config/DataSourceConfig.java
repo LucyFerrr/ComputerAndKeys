@@ -22,12 +22,13 @@ public class DataSourceConfig {
         String url = System.getenv("SPRING_DATASOURCE_URL");
         String userName = System.getenv("SPRING_DATASOURCE_USERNAME");
         String password = System.getenv("SPRING_DATASOURCE_PASSWORD");
+        String driver = System.getenv("SPRING_DATASOURCE_DRIVER_CLASS_NAME");
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(url);
         dataSource.setUsername(userName);
         dataSource.setPassword(password);
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setDriverClassName(driver);
 
         return dataSource;
     }
