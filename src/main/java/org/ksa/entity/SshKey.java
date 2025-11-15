@@ -9,19 +9,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ssh_keys", uniqueConstraints = @UniqueConstraint(name = "uk_server_user_public",
-        columnNames = {"server_name", "user_name", "public_key"}))
+@Table(name = "ssh_keys", uniqueConstraints = @UniqueConstraint(name = "uk_server_type_name_public",
+        columnNames = {"server_type", "server_name", "public_key"}),
+        indexes = @Index(name = "idx_server_type_name", columnList = "server_type,server_name"))
 public class SshKey {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "server_type", nullable = false)
+    private String serverType;
+
     @Column(name = "server_name", nullable = false)
     private String serverName;
-
-    @Column(name = "user_name", nullable = false)
-    private String userName;
 
     @Column(name = "key_type", nullable = false)
     private String type;

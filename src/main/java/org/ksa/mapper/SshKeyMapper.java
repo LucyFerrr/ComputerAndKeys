@@ -18,17 +18,17 @@ public class SshKeyMapper {
                .type(sshKey.getType())
                .publicKey(sshKey.getPublicKey())
                .comment(sshKey.getComment())
-               .server(sshKey.getServerName())
-               .user(sshKey.getUserName())
+               .serverType(sshKey.getServerType())
+               .serverName(sshKey.getServerName())
                .build();
    }
 
-   public static SshKey mapToSshKey(SshKeyRequestDTO.SshKeyDTO dto, String serverName, String userName) {
+   public static SshKey mapToSshKey(SshKeyRequestDTO.SshKeyDTO dto, String serverType, String serverName) {
        if (dto == null) return null;
 
        return SshKey.builder()
+               .serverType(serverType)
                .serverName(serverName)
-               .userName(userName)
                .type(dto.getType())
                .publicKey(dto.getPublicKey())
                .comment(dto.getComment())

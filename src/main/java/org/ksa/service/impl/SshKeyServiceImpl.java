@@ -24,17 +24,17 @@ public class SshKeyServiceImpl implements SshKeyService {
 
     // POST new SSH key
     @Override
-    public SshKeyResponseDTO addSshKey(String serverName, String userName, SshKeyRequestDTO request) {
+    public SshKeyResponseDTO addSshKey(String serverName, String serverType, SshKeyRequestDTO request) {
 
         SshKeyRequestDTO.SshKeyDTO keyDTO = request.getSshKey();
 
         // Check key if already exists
-        if (sshKeyRepository.existsByServerNameAndUserNameAndPublicKey(serverName, userName, keyDTO.getPublicKey())){
+        if (sshKeyRepository.existsByServerNameAndUserNameAndPublicKey(serverName, serverType, keyDTO.getPublicKey())){
             throw new InvalidSshKeyException("SSH key already exists");
         }
 
         // Save key
-        SshKey entity = SshKeyMapper.mapToSshKey(keyDTO, serverName, userName);
+        SshKey entity = SshKeyMapper.mapToSshKey(keyDTO, serverName, serverType);
         SshKey saved = sshKeyRepository.save(entity);
 
         return SshKeyMapper.mapToResponseDto(saved);
@@ -51,8 +51,8 @@ public class SshKeyServiceImpl implements SshKeyService {
 
     // GET all SSH keys
     @Override
-    public List<SshKeyResponseDTO> getAllKeys(String serverName, String userName) {
-        return sshKeyRepository.findByServerNameAndUserName(serverName, userName)
+    public List<SshKeyResponseDTO> getAllKeys(String serverName, String serverType) {
+        return sshKeyRepository.findByServerNameAndUserName(serverName, serverType)
                 .stream()
                 .map(SshKeyMapper::mapToResponseDto)
                 .collect(Collectors.toList());

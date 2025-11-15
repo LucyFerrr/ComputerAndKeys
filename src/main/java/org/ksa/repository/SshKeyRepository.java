@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface SshKeyRepository extends JpaRepository<SshKey, Long> {
 
-    boolean existsByServerNameAndUserNameAndPublicKey(String serverName, String userName, String publicKey);
+    boolean existsByServerNameAndUserNameAndPublicKey(String serverType, String serverName, String publicKey);
 
-    List<SshKey> findByServerNameAndUserName(String serverName, String userName);
+    List<SshKey> findByServerNameAndUserName(String serverType, String serverName);
 
-    Optional<SshKey> findByServerNameAndUserNameAndPublicKey(String serverName, String userName, String publicKey);
+    Optional<SshKey> findByServerNameAndUserNameAndPublicKey(String serverType, String serverName, String publicKey);
 }

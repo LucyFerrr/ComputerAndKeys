@@ -21,7 +21,7 @@ public class SshKeyResponseDTO {
 
     private String comment;
 
-    private String server;
+    private String serverType;
 
-    private String user;
+    private String serverName;
 }

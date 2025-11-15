@@ -6,11 +6,11 @@ import org.ksa.dto.SshKeyResponseDTO;
 import java.util.List;
 
 public interface SshKeyService {
-    SshKeyResponseDTO addSshKey(String serverName, String userName, SshKeyRequestDTO sshKeyRequestDTO);
+    SshKeyResponseDTO addSshKey(String serverName, String serverType, SshKeyRequestDTO sshKeyRequestDTO);
 
     SshKeyResponseDTO getKeyById(Long id);
 
-    List<SshKeyResponseDTO> getAllKeys(String serverName, String userName);
+    List<SshKeyResponseDTO> getAllKeys(String serverName, String serverType);
 
     SshKeyResponseDTO updateSshKey(Long id, SshKeyRequestDTO sshKeyRequestDTO);
 
