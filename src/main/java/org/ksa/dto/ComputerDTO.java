@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+import static org.ksa.constants.ErrorMessages.*;
+
 /**
  * DTO representing computer entity.
  * Support both JSON and XML formats.
@@ -25,17 +27,17 @@ import java.util.List;
 @Schema(description = "Computer DTO")
 public class ComputerDTO {
 
-    @NotBlank(message = "Type is required")
+    @NotBlank(message = VALIDATION_TYPE_REQUIRED)
     @JacksonXmlProperty(localName = "type")
     @Schema(description = "Type of Computer", example = "laptop")
     private String type;
 
-    @NotBlank(message = "Maker is required")
+    @NotBlank(message = VALIDATION_MAKER_REQUIRED)
     @JacksonXmlProperty(localName = "maker")
     @Schema(description = "Computer manufacturer", example = "ASUS")
     private String maker;
 
-    @NotBlank(message = "Model is required")
+    @NotBlank(message = VALIDATION_MODEL_REQUIRED)
     @JacksonXmlProperty(localName = "model")
     @Schema(description = "Computer model", example = "X507UA")
     private String model;

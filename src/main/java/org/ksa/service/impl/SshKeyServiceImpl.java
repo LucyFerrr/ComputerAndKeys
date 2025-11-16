@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.ksa.constants.ErrorMessages.*;
+
 /**
  * Implementation of {@link SshKeyService} for managing {@link SshKey} entities.
  * Provides CRUD operations for SSH keys.
@@ -49,7 +51,7 @@ public class SshKeyServiceImpl implements SshKeyService {
         validateSshKey(keyDTO);
 
         if (sshKeyRepository.existsByServerTypeAndServerNameAndPublicKey(serverType, serverName, keyDTO.getPublicKey())) {
-            throw new InvalidSshKeyException("SSH key already exists");
+            throw new InvalidSshKeyException(SSH_KEY_ALREADY_EXISTS);
         }
 
         SshKey entity = SshKeyMapper.mapToSshKey(keyDTO, serverType, serverName);
@@ -74,7 +76,7 @@ public class SshKeyServiceImpl implements SshKeyService {
     @Override
     public SshKeyResponseDTO getKeyById(Long id) {
         SshKey sshKey = sshKeyRepository.findById(id)
-                .orElseThrow(() -> new SshKeyNotFoundException("SSH key not found"));
+                .orElseThrow(() -> new SshKeyNotFoundException(SSH_KEY_NOT_FOUND));
 
         return SshKeyMapper.mapToResponseDto(sshKey);
     }
@@ -111,7 +113,7 @@ public class SshKeyServiceImpl implements SshKeyService {
     @Override
     public SshKeyResponseDTO updateSshKey(Long id, SshKeyRequestDTO sshKeyRequestDTO) {
         SshKey sshKey = sshKeyRepository.findById(id)
-                .orElseThrow(() -> new SshKeyNotFoundException("SSH key not found"));
+                .orElseThrow(() -> new SshKeyNotFoundException(SSH_KEY_NOT_FOUND));
 
         SshKeyRequestDTO.SshKeyDTO sshKeyDTO = sshKeyRequestDTO.getSshKey();
 
@@ -136,7 +138,7 @@ public class SshKeyServiceImpl implements SshKeyService {
     @Override
     public void deleteSshKey(Long id) {
         if (!sshKeyRepository.existsById(id)) {
-            throw new SshKeyNotFoundException("SSH key not found");
+            throw new SshKeyNotFoundException(SSH_KEY_NOT_FOUND);
         }
 
         sshKeyRepository.deleteById(id);
@@ -161,13 +163,13 @@ public class SshKeyServiceImpl implements SshKeyService {
 
         if ("ssh-rsa".equals(type)) {
             if (publicKey.length() < 300) {
-                throw new InvalidSshKeyException("The content of the public key is invalid for the type 'ssh-rsa'");
+                throw new InvalidSshKeyException(SSH_KEY_INVALID_RSA);
             }
         }
 
         if ("ssh-ed25519".equals(type)) {
             if (publicKey.length() < 40 || publicKey.length() > 100) {
-                throw new InvalidSshKeyException("The content of the public key is invalid for the type 'ed25519'");
+                throw new InvalidSshKeyException(SSH_KEY_INVALID_ED25519);
             }
         }
     }

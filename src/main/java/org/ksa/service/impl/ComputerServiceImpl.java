@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.ksa.constants.ErrorMessages.*;
+
 /**
  * Implementation of {@link ComputerService} for managing {@link Computer} entities.
  * Provides CRUD operations for computers.
@@ -45,19 +47,19 @@ public class ComputerServiceImpl implements ComputerService {
     public ComputerDTO getComputerByMakerAndModel(String maker, String model) {
         if (model == null || model.trim().isEmpty() || model.equals("/")) {
             if (computerRepository.existsByMaker(maker)) {
-                throw new InvalidMakerException("Model parameter required");
+                throw new InvalidMakerException(MODEL_PARAMETER_REQUIRED);
             } else {
-                throw new ComputerNotFoundException("Maker '" + maker + "' not found");
+                throw new ComputerNotFoundException(COMPUTER_NOT_FOUND_FOR_MAKER);
             }
         }
 
         if (!computerRepository.existsByMaker(maker)) {
-            throw new ComputerNotFoundException("Maker '" + maker + "' not found");
+            throw new ComputerNotFoundException(COMPUTER_NOT_FOUND_FOR_MAKER_AND_MODEL);
         }
 
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> {
-                    return new ComputerNotFoundException("Computer not found for maker '" + maker + "' and model '" + model + "'");
+                    return new ComputerNotFoundException(COMPUTER_NOT_FOUND_FOR_MAKER_AND_MODEL);
                 });
 
         return ComputerMapper.mapToComputerDto(computer);
@@ -97,7 +99,7 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     public ComputerDTO createComputer(ComputerDTO computerDTO) {
         if (computerRepository.existsByMakerAndModel(computerDTO.getMaker(), computerDTO.getModel())) {
-            throw new IllegalArgumentException("Computer already exists");
+            throw new IllegalArgumentException(COMPUTER_ALREADY_EXISTS);
         }
 
         Computer computer = ComputerMapper.mapToComputer(computerDTO);
@@ -124,7 +126,7 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     public ComputerDTO updateComputer(String maker, String model, ComputerDTO computerDTO) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
-                .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));
+                .orElseThrow(() -> new ComputerNotFoundException(COMPUTER_NOT_FOUND));
 
         ComputerMapper.updateEntityFromDTO(computerDTO, computer);
         Computer updated = computerRepository.save(computer);
@@ -148,7 +150,7 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     public void deleteComputer(String maker, String model) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
-                .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));
+                .orElseThrow(() -> new ComputerNotFoundException(COMPUTER_NOT_FOUND));
 
         computerRepository.delete(computer);
     }

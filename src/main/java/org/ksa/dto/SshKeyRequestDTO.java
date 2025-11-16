@@ -11,6 +11,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import static org.ksa.constants.ErrorMessages.VALIDATION_PUBLIC_KEY_REQUIRED;
+import static org.ksa.constants.ErrorMessages.VALIDATION_SSH_KEY_TYPE_REQUIRED;
+
 /**
  * Request DTO for submitting SSH key.
  */
@@ -35,12 +38,12 @@ public class SshKeyRequestDTO {
     @AllArgsConstructor
     public static class SshKeyDTO {
 
-        @NotBlank(message = "SSH key type is required")
+        @NotBlank(message = VALIDATION_SSH_KEY_TYPE_REQUIRED)
         @Pattern(regexp = "^(ssh-rsa|ssh-ed25519)$")
         @Schema(description = "SSH key type", example = "ssh-ed25519")
         private String type;
 
-        @NotBlank(message = "Public key is required")
+        @NotBlank(message = VALIDATION_PUBLIC_KEY_REQUIRED)
         @JsonProperty("public")
         @Schema(description = "Public key content", example = "AAAAC3NzaC1lZDI1NTE5AAAAIOiKKC7lLUcyvJMo1gjvMr56XvOq814Hhin0OCYFDqT4")
         private String publicKey;
