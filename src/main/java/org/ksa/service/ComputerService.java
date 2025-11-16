@@ -1,11 +1,12 @@
 package org.ksa.service;
 
 import org.ksa.dto.ComputerDTO;
+import org.ksa.entity.Computer;
 
 import java.util.List;
 
 /**
- * Service interface for managing {@link org.ksa.entity.Computer} entities.
+ * Service interface for managing {@link Computer} entities.
  */
 public interface ComputerService {
 

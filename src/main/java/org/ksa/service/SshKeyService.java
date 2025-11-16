@@ -2,11 +2,12 @@ package org.ksa.service;
 
 import org.ksa.dto.SshKeyRequestDTO;
 import org.ksa.dto.SshKeyResponseDTO;
+import org.ksa.entity.SshKey;
 
 import java.util.List;
 
 /**
- * Service interface for managing {@link org.ksa.entity.SshKey} entities.
+ * Service interface for managing {@link SshKey} entities.
  */
 public interface SshKeyService {
 
