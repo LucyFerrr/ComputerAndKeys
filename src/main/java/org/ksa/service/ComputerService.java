@@ -2,6 +2,8 @@ package org.ksa.service;
 
 import org.ksa.dto.ComputerDTO;
 
+import java.util.List;
+
 /**
  * Service interface for managing {@link org.ksa.entity.Computer} entities.
  */
@@ -15,6 +17,13 @@ public interface ComputerService {
      * @return the matching {@link ComputerDTO}, or {@code null} if not found
      */
     ComputerDTO getComputerByMakerAndModel(String maker, String model);
+
+    /**
+     * Retrieves all computer.
+     *
+     * @return a list of matching {@link ComputerDTO} objects
+     */
+    List<ComputerDTO> getAllComputers();
 
     /**
      * Creates a new computer record.

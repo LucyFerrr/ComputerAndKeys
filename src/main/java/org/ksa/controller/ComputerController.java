@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * REST controller for managing computer records.
@@ -68,6 +69,28 @@ public class ComputerController {
             @PathVariable(required = false) String model) {
         ComputerDTO computer = computerService.getComputerByMakerAndModel(maker, model);
         return ResponseEntity.ok(computer);
+    }
+
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @Operation(
+            summary = "Get all computers",
+            description = "Retrieves a list of all computer in the system"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of computers",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ComputerDTO.class)
+                    )
+            )
+    })
+    public ResponseEntity<List<ComputerDTO>> getAllComputers() {
+        List<ComputerDTO> computers = computerService.getAllComputers();
+        return ResponseEntity.ok(computers);
     }
 
     /**

@@ -11,6 +11,9 @@ import org.ksa.service.ComputerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Implementation of {@link ComputerService} for managing {@link Computer} entities.
  * Provides CRUD operations for computers.
@@ -60,6 +63,14 @@ public class ComputerServiceImpl implements ComputerService {
         return ComputerMapper.mapToComputerDto(computer);
     }
 
+    @Override
+    public List<ComputerDTO> getAllComputers() {
+        return computerRepository.findAll()
+                .stream()
+                .map(ComputerMapper::mapToComputerDto)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Creates new computer record.
      * <p>
@@ -73,6 +84,7 @@ public class ComputerServiceImpl implements ComputerService {
      * @return the created {@link ComputerDTO}
      * @throws IllegalArgumentException if computer with same maker and model already exists
      */
+    @Override
     public ComputerDTO createComputer(ComputerDTO computerDTO) {
         if (computerRepository.existsByMakerAndModel(computerDTO.getMaker(), computerDTO.getModel())) {
             throw new IllegalArgumentException("Computer already exists");
@@ -83,8 +95,6 @@ public class ComputerServiceImpl implements ComputerService {
 
         return ComputerMapper.mapToComputerDto(saved);
     }
-
-    // PUT update existing computer
 
     /**
      * Updates an existing computer by maker and model.
@@ -101,6 +111,7 @@ public class ComputerServiceImpl implements ComputerService {
      * @return the updated {@link ComputerDTO}
      * @throws ComputerNotFoundException if computer does not exist
      */
+    @Override
     public ComputerDTO updateComputer(String maker, String model, ComputerDTO computerDTO) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));
@@ -110,8 +121,6 @@ public class ComputerServiceImpl implements ComputerService {
 
         return ComputerMapper.mapToComputerDto(updated);
     }
-
-    // DELETE computer
 
     /**
      * Deletes a computer identified by maker and model.
@@ -126,6 +135,7 @@ public class ComputerServiceImpl implements ComputerService {
      * @param model model name of computer
      * @throws ComputerNotFoundException if the computer does not exist
      */
+    @Override
     public void deleteComputer(String maker, String model) {
         Computer computer = computerRepository.findByMakerAndModel(maker, model)
                 .orElseThrow(() -> new ComputerNotFoundException("Computer not found"));
