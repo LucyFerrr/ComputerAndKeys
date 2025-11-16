@@ -63,6 +63,16 @@ public class ComputerServiceImpl implements ComputerService {
         return ComputerMapper.mapToComputerDto(computer);
     }
 
+    /**
+     * Retrieves all computer records.
+     * <p>
+     * Business rules:
+     * <ul>
+     *     <li>200 Return all computers</li>
+     * </ul>
+     *
+     * @return list of {@link ComputerDTO} representing all computers
+     */
     @Override
     public List<ComputerDTO> getAllComputers() {
         return computerRepository.findAll()

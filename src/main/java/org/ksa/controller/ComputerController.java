@@ -71,6 +71,13 @@ public class ComputerController {
         return ResponseEntity.ok(computer);
     }
 
+    /**
+     * Handles HTTP GET requests to retrieve all computer.
+     * <p>
+     * GET /computers
+     *
+     * @return {@link ResponseEntity} containing a list of {@link ComputerDTO} objects
+     */
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
