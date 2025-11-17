@@ -19,7 +19,6 @@ A production-ready REST service for managing computers and SSH keys. Built with 
 - [Documentation](#documentation)
 - [Testing](#testing)
 - [Deployment](#deployment)
-- [Contributing](#contributing)
 
 ## Quick Start
 
